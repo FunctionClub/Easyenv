@@ -154,7 +154,7 @@ while :; do echo
 	fi
 done
 
-if [ $chooseenv=1 ];then
+if [ $chooseenv==1 ];then
 	echo "1.Java7"
 	echo "2.Java8"
 	while :; do echo
@@ -167,18 +167,18 @@ if [ $chooseenv=1 ];then
 	done
 	InstallBasicPackages
 	UninstallOpenJDK
-	if [ $jdkversion=1 ];then
+	if [ $jdkversion==1 ];then
 		InstallJava7
 	fi
-	if [ $jdkversion=2 ];then
+	if [ $jdkversion==2 ];then
 		InstallJava8
 	fi
 fi
 
-if [ $chooseenv=2 ];then
+if [ $chooseenv==2 ];then
 
 fi
 
-if [ $chooseenv=3];then
+if [ $chooseenv==3];then
 
 fi
