@@ -1,4 +1,3 @@
-#Main
 
 
 
@@ -54,22 +53,30 @@ fi
 }
 
 function InstallJava8(){
-if [ ${OS_BIT} == 32];then
-	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-i586.tar.gz"
+if [ ${OS_BIT} == 32 ];then
 	rm -rf jdk*
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-i586.tar.gz"
 	tar -xf jdk-8u112-linux-i586.tar.gz
 	cd jdk*
 	mkdir /usr/local/java8
 	mv * /usr/local/java8/
 fi
 
+if [ ${OS_BIT} == 64 ];then
+	rm -rf jdk*
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz"
+	tar -xf jdk-8u112-linux-x64.tar.gz
+	cd jdk*
+	mkdir /usr/local/java8
+	mv * /usr/local/java8/
+fi
 #Configure the PATH for Java8
 
 echo "export JAVA_HOME=/usr/local/java8" >> ~/.bashrc
-echo "export JAVA_BIN=$JAVA_HOME/bin">>~/.bashrc
-echo "export JAVA_LIB=$JAVA_HOME/lib">>~/.bashrc
-echo "export CLASSPATH=.:$JAVA_LIB/tools.jar:$JAVA_LIB/dt.jar">>~/.bashrc
-echo "export PATH=$JAVA_BIN:$PATH">>~/.bashrc
+echo "export JAVA_BIN=\$JAVA_HOME/bin">>~/.bashrc
+echo "export JAVA_LIB=\$JAVA_HOME/lib">>~/.bashrc
+echo "export CLASSPATH=.:\$JAVA_LIB/tools.jar:\$JAVA_LIB/dt.jar">>~/.bashrc
+echo "export PATH=\$JAVA_BIN:\$PATH">>~/.bashrc
 source ~/.bashrc
 	
 }
@@ -83,12 +90,28 @@ function CheckIfRoot(){
 function InstallBasicPackages(){
 
 if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
+	apt-get update -y
 	apt-get install wget tar rpm build-essential -y
 fi
 
 if [ ${OS} == CentOS ];then
+	yum update -y
 	yum install epel-release -y
 	yum install wget tar rpm -y
 	yum groupinstall "Development Tools" -y
 fi
 }
+
+
+
+#Main
+CheckIfRoot
+CheckOS
+InstallBasicPackages
+clear
+echo "Welcome to Easyenv!"
+echo "1.Install Java"
+echo "2.Install Nodejs"
+echo "3.Install GoLang"
+echo "4.Install Lua"
+echo "5.Install Ruby && Gems"
