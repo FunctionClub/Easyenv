@@ -52,24 +52,55 @@ fi
 
 }
 
+
+
+
+function InstallJava7(){
+rm -rf jdk*
+if [ ${OS_BIT} == 32 ];then
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-i586.tar.gz"
+	tar -xf jdk-7u80-linux-i586.tar.gz
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz"
+	tar -xf jdk-7u80-linux-x64.tar.gz
+fi
+cd jdk*
+mkdir /usr/local/java7
+mv * /usr/local/java7/
+cd ..
+rm -rf jdk*
+
+#Configure the PATH for Java7
+
+echo "export JAVA_HOME=/usr/local/java7" >> ~/.bashrcecho "export JAVA_BIN=\$JAVA_HOME/bin">>~/.bashrc
+echo "export JAVA_LIB=\$JAVA_HOME/lib">>~/.bashrc
+echo "export CLASSPATH=.:\$JAVA_LIB/tools.jar:\$JAVA_LIB/dt.jar">>~/.bashrc
+echo "export PATH=\$JAVA_BIN:\$PATH">>~/.bashrc
+source ~/.bashrc
+}
+
+
 function InstallJava8(){
 if [ ${OS_BIT} == 32 ];then
 	rm -rf jdk*
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-i586.tar.gz"
 	tar -xf jdk-8u112-linux-i586.tar.gz
-	cd jdk*
-	mkdir /usr/local/java8
-	mv * /usr/local/java8/
 fi
 
 if [ ${OS_BIT} == 64 ];then
 	rm -rf jdk*
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz"
 	tar -xf jdk-8u112-linux-x64.tar.gz
-	cd jdk*
-	mkdir /usr/local/java8
-	mv * /usr/local/java8/
+	
 fi
+cd jdk*
+mkdir /usr/local/java8
+mv * /usr/local/java8/
+cd ..
+rm -rf jdk*
+
 #Configure the PATH for Java8
 
 echo "export JAVA_HOME=/usr/local/java8" >> ~/.bashrc
@@ -107,7 +138,6 @@ fi
 #Main
 CheckIfRoot
 CheckOS
-InstallBasicPackages
 clear
 echo "Welcome to Easyenv!"
 echo "1.Install Java"
@@ -115,3 +145,40 @@ echo "2.Install Nodejs"
 echo "3.Install GoLang"
 echo "4.Install Lua"
 echo "5.Install Ruby && Gems"
+while :; do echo
+	read -p "Please input your choice: [1-5]: " chooseenv
+	if [[ ! $chooseenv =~ ^[1-5]$ ]]; then
+		echo "${CWARNING}input error! Please only input number!${CEND}"
+	else
+		break	
+	fi
+done
+
+if [ $chooseenv=1 ];then
+	echo "1.Java7"
+	echo "2.Java8"
+	while :; do echo
+		read -p "Please input your choice: [1-2]: " jdkversion
+		if [[ ! $jdkversion =~ ^[1-2]$ ]]; then
+			echo "${CWARNING}input error! Please only input number!${CEND}"
+		else
+			break
+		fi
+	done
+	InstallBasicPackages
+	UninstallOpenJDK
+	if [ $jdkversion=1 ];then
+		InstallJava7
+	fi
+	if [ $jdkversion=2 ];then
+		InstallJava8
+	fi
+fi
+
+if [ $chooseenv=2 ];then
+
+fi
+
+if [ $chooseenv=3];then
+
+fi
