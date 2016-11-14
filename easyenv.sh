@@ -25,7 +25,7 @@ elif [ -n "$(grep Deepin /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == 'De
 [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
     Debian_version=$(lsb_release -sr | awk -F. '{print $1}')
 elif [ -n "$(grep Ubuntu /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == 'Ubuntu' -o -n "$(grep 'Linux Mint' /etc/issue)" ];then OS=Ubuntu
- ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
+ ! -e [ "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
     Ubuntu_version=$(lsb_release -sr | awk -F. '{print $1}')
     [ -n "$(grep 'Linux Mint 18' /etc/issue)" ] && Ubuntu_version=16
 else
@@ -154,7 +154,7 @@ while :; do echo
 	fi
 done
 
-if [ $chooseenv==1 ];then
+if [ $chooseenv == 1 ];then
 	echo "1.Java7"
 	echo "2.Java8"
 	while :; do echo
@@ -167,18 +167,10 @@ if [ $chooseenv==1 ];then
 	done
 	InstallBasicPackages
 	UninstallOpenJDK
-	if [ $jdkversion==1 ];then
+	if [ $jdkversion == 1 ];then
 		InstallJava7
-	fi
-	if [ $jdkversion==2 ];then
+	else
 		InstallJava8
 	fi
 fi
 
-if [ $chooseenv==2 ];then
-
-fi
-
-if [ $chooseenv==3];then
-
-fi
