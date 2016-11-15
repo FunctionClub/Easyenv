@@ -279,13 +279,16 @@ if [ $chooseenv == 2 ];then
 	if [ $nodejsversion == 1 ];then
 		UninstallNodeJs
 		InstallNodeJs4
-	elif[ $nodejsversion == 2 ];then
+	fi
+	if[ $nodejsversion == 2 ];then
 		UninstallNodeJs
 		InstallNodeJs5
-	elif[ $nodejsversion == 3 ];then
+	fi
+	if[ $nodejsversion == 3 ];then
 		UninstallNodeJs
 		InstallNodeJs6
-	elif[ $nodejsversion == 4 ];then
+	fi
+	if[ $nodejsversion == 4 ];then
 		UninstallNodeJs
 		InstallNodeJs7
 	fi
