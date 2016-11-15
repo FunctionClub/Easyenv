@@ -242,6 +242,20 @@ if [ ${OS_BIT} == 64 ];then
 fi
 }
 
+function UninstallOpenJDK(){
+
+if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
+	apt-get purge jdk*
+fi
+
+if [ ${OS} == CentOS ];then
+	yum remove jdk*
+fi
+
+#Clean Installed Java via this script before
+rm -rf /usr/local/java*
+}
+
 #Main
 echo "Welcome to Easyenv!"
 echo "1.Install Java"
