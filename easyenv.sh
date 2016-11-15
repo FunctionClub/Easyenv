@@ -43,7 +43,11 @@ else
   kill -9 $$
 fi
 
-
+if [ "($getconf WORD_BIT)" == "32" ] && [ "$(getconf LONG_BIT)" == "64" ]; then
+  OS_BIT=64
+else
+  OS_BIT=32
+fi
 }
 
 function UninstallOpenJDK(){
