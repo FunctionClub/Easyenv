@@ -1,9 +1,4 @@
 
-
-
-
-
-
 #Functions
 
 function CheckOS(){
@@ -134,6 +129,88 @@ fi
 }
 
 
+function UninstallNodeJs(){
+if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
+	apt-get autoremove nodejs -y
+fi
+
+if [ ${OS} == CentOS ];then
+	yum remove nodejs -y
+fi
+
+#Remove the installed NodeJs via this script before.
+rm -rf /usr/local/nodejs*
+rm -rf /usr/local/bin/node
+rm -rf /usr/local/bin/npm
+}
+
+function InstallNodeJs4(){
+mkdir /usr/local/nodejs4
+if [ ${OS_BIT} == 32 ];then
+	wget https://nodejs.org/dist/v4.6.2/node-v4.6.2-linux-x86.tar.gz
+	tar -xf node-v4.6.2-linux-x86.tar.gz -C /usr/local/nodejs4/
+	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x86/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x86/bin/npm /usr/local/bin/npm
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget https://nodejs.org/dist/v4.6.2/node-v4.6.2-linux-x64.tar.gz
+	tar -xf node-v4.6.2-linux-x64.tar.gz -C /usr/local/nodejs4/
+	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x64/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x64/bin/npm /usr/local/bin/npm
+fi
+}
+
+function InstallNodeJs5(){
+mkdir /usr/local/nodejs5
+if [ ${OS_BIT} == 32 ];then
+	wget https://nodejs.org/dist/v5.9.1/node-v5.9.1-linux-x86.tar.gz
+	tar -xf node-v5.9.1-linux-x86.tar.gz -C /usr/local/nodejs5/
+	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x86/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x86/bin/npm /usr/local/bin/npm
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget https://nodejs.org/dist/v5.9.1/node-v5.9.1-linux-x64.tar.gz
+	tar -xf node-v5.9.1-linux-x64.tar.gz -C /usr/local/nodejs5/
+	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x64/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x64/bin/npm /usr/local/bin/npm
+fi
+}
+
+function InstallNodeJs6(){
+mkdir /usr/local/nodejs6
+if [ ${OS_BIT} == 32 ];then
+	wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x86.tar.gz
+	tar -xf node-v6.9.1-linux-x86.tar.gz -C /usr/local/nodejs6/
+	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x86/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x86/bin/npm /usr/local/bin/npm
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x64.tar.gz
+	tar -xf node-v6.9.1-linux-x64.tar.gz -C /usr/local/nodejs6/
+	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x64/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x64/bin/npm /usr/local/bin/npm
+fi
+}
+
+function InstallNodeJs7(){
+mkdir /usr/local/nodejs7
+if [ ${OS_BIT} == 32 ];then
+	wget https://nodejs.org/dist/v7.1.0/node-v7.1.0-linux-x86.tar.gz
+	tar -xf node-v7.1.0-linux-x86.tar.gz -C /usr/local/nodejs7/
+	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x86/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x86/bin/npm /usr/local/bin/npm
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget https://nodejs.org/dist/v7.1.0/node-v7.1.0-linux-x64.tar.gz
+	tar -xf node-v7.1.0-linux-x64.tar.gz -C /usr/local/nodejs7/
+	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x64/bin/node /usr/local/bin/node
+	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x64/bin/npm /usr/local/bin/npm
+fi
+}
 
 #Main
 CheckIfRoot
@@ -171,6 +248,36 @@ if [ $chooseenv == 1 ];then
 		InstallJava7
 	else
 		InstallJava8
+	fi
+fi
+
+if [ $chooseenv == 2 ];then
+	echo "1.Node.JS 4.2.6"
+	echo "2.Node.JS 5.9.1"
+	echo "3.Node.JS 6.9.1"
+	echo "4.Node.JS 7.1.0"
+	while :; do echo
+		read -p "Please input your choice: [1-4]: " nodejsversion
+		if [[ ! $nodejsversion =~ ^[1-4]$ ]]; then
+			echo "${CWARNING}input error! Please only input number!${CEND}"
+		else
+			break
+		fi
+	done
+	InstallBasicPackages
+	UninstallNodeJs
+	if [ $nodejsversion == 1 ];then
+		UninstallNodeJs
+		InstallNodeJs4
+	elif[ $nodejsversion == 2 ];then
+		UninstallNodeJs
+		InstallNodeJs5
+	elif[ $nodejsversion == 3 ];then
+		UninstallNodeJs
+		InstallNodeJs6
+	elif[ $nodejsversion == 4 ];then
+		UninstallNodeJs
+		InstallNodeJs7
 	fi
 fi
 
