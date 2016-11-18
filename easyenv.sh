@@ -1,14 +1,6 @@
-
-#Functions
-
-
 ######Check Root######
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 ######Check Root######
-
-
-
-
 
 ######Check OS Start######
 if [ -n "$(grep 'Aliyun Linux release' /etc/issue)" -o -e /etc/redhat-release ]; then
@@ -37,45 +29,10 @@ else
   kill -9 $$
 fi
 
-if uname -m | grep -Eqi "arm"; then
-  armPlatform="y"
-  if uname -m | grep -Eqi "armv7"; then
-    TARGET_ARCH="armv7"
-  elif uname -m | grep -Eqi "armv8"; then
-    TARGET_ARCH="arm64"
-  else
-    TARGET_ARCH="unknown"
-  fi
-fi
-
 if [ $(getconf WORD_BIT) == 32 ] && [ $(getconf LONG_BIT) == 64 ]; then
   OS_BIT=64
-  SYS_BIG_FLAG=x64 #jdk
-  SYS_BIT_a=x86_64;SYS_BIT_b=x86_64; #mariadb
 else
   OS_BIT=32
-  SYS_BIG_FLAG=i586
-  SYS_BIT_a=x86;SYS_BIT_b=i686;
-fi
-
-LIBC_YN=$(awk -v A=$(getconf -a | grep GNU_LIBC_VERSION | awk '{print $NF}') -v B=2.14 'BEGIN{print(A>=B)?"0":"1"}')
-[ $LIBC_YN == '0' ] && GLIBC_FLAG=linux-glibc_214 || GLIBC_FLAG=linux
-
-THREAD=$(grep 'processor' /proc/cpuinfo | sort -u | wc -l)
-
-# Percona
-if [ -f "/usr/lib/x86_64-linux-gnu/libssl.so.1.0.0" ]; then
-  if [ "${Debian_version}" == "6" ]; then
-    sslLibVer=ssl098
-  else
-    sslLibVer=ssl100
-  fi
-elif [ -f "/usr/lib64/libssl.so.10" ]; then
-  if [ "${CentOS_RHEL_version}" == "5" ]; then
-    sslLibVer=ssl098e
-  else
-    sslLibVer=ssl101
-  fi
 fi
 
 ######Check OS End######
@@ -87,12 +44,12 @@ function InstallJava7(){
 rm -rf jdk*
 if [ ${OS_BIT} == 32 ];then
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-i586.tar.gz"
-	tar -xf jdk-7u80-linux-i586.tar.gz
+	tar -xf jdk-7u80-linux-i586.tar.gz && rm -rf jdk-7u80-linux-i586.tar.gz
 fi
 
 if [ ${OS_BIT} == 64 ];then
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz"
-	tar -xf jdk-7u80-linux-x64.tar.gz
+	tar -xf jdk-7u80-linux-x64.tar.gz && rm -rf jdk-7u80-linux-x64.tar.gz
 fi
 cd jdk*
 mkdir /usr/local/java7
@@ -114,13 +71,13 @@ function InstallJava8(){
 if [ ${OS_BIT} == 32 ];then
 	rm -rf jdk*
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-i586.tar.gz"
-	tar -xf jdk-8u112-linux-i586.tar.gz
+	tar -xf jdk-8u112-linux-i586.tar.gz && rm -rf jdk-8u112-linux-i586.tar.gz
 fi
 
 if [ ${OS_BIT} == 64 ];then
 	rm -rf jdk*
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz"
-	tar -xf jdk-8u112-linux-x64.tar.gz
+	tar -xf jdk-8u112-linux-x64.tar.gz && rm -rf tar -xf jdk-8u112-linux-x64.tar.gz
 	
 fi
 cd jdk*
@@ -179,6 +136,7 @@ mkdir /usr/local/nodejs4
 if [ ${OS_BIT} == 32 ];then
 	wget https://nodejs.org/dist/v4.6.2/node-v4.6.2-linux-x86.tar.gz
 	tar -xf node-v4.6.2-linux-x86.tar.gz -C /usr/local/nodejs4/
+	rm -rf node-v4.6.2-linux-x86.tar.gz
 	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x86/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x86/bin/npm /usr/local/bin/npm
 fi
@@ -186,6 +144,7 @@ fi
 if [ ${OS_BIT} == 64 ];then
 	wget https://nodejs.org/dist/v4.6.2/node-v4.6.2-linux-x64.tar.gz
 	tar -xf node-v4.6.2-linux-x64.tar.gz -C /usr/local/nodejs4/
+	rm -rf node-v4.6.2-linux-x64.tar.gz
 	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x64/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs4/node-v4.6.2-linux-x64/bin/npm /usr/local/bin/npm
 fi
@@ -196,6 +155,7 @@ mkdir /usr/local/nodejs5
 if [ ${OS_BIT} == 32 ];then
 	wget https://nodejs.org/dist/v5.9.1/node-v5.9.1-linux-x86.tar.gz
 	tar -xf node-v5.9.1-linux-x86.tar.gz -C /usr/local/nodejs5/
+	rm -rf node-v5.9.1-linux-x86.tar.gz
 	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x86/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x86/bin/npm /usr/local/bin/npm
 fi
@@ -203,6 +163,7 @@ fi
 if [ ${OS_BIT} == 64 ];then
 	wget https://nodejs.org/dist/v5.9.1/node-v5.9.1-linux-x64.tar.gz
 	tar -xf node-v5.9.1-linux-x64.tar.gz -C /usr/local/nodejs5/
+	rm -rf node-v5.9.1-linux-x64.tar.gz
 	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x64/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs5/node-v5.9.1-linux-x64/bin/npm /usr/local/bin/npm
 fi
@@ -213,6 +174,7 @@ mkdir /usr/local/nodejs6
 if [ ${OS_BIT} == 32 ];then
 	wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x86.tar.gz
 	tar -xf node-v6.9.1-linux-x86.tar.gz -C /usr/local/nodejs6/
+	rm -rf node-v6.9.1-linux-x86.tar.gz
 	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x86/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x86/bin/npm /usr/local/bin/npm
 fi
@@ -220,6 +182,7 @@ fi
 if [ ${OS_BIT} == 64 ];then
 	wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x64.tar.gz
 	tar -xf node-v6.9.1-linux-x64.tar.gz -C /usr/local/nodejs6/
+	rm -rf node-v6.9.1-linux-x64.tar.gz
 	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x64/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs6/node-v6.9.1-linux-x64/bin/npm /usr/local/bin/npm
 fi
@@ -230,6 +193,7 @@ mkdir /usr/local/nodejs7
 if [ ${OS_BIT} == 32 ];then
 	wget https://nodejs.org/dist/v7.1.0/node-v7.1.0-linux-x86.tar.gz
 	tar -xf node-v7.1.0-linux-x86.tar.gz -C /usr/local/nodejs7/
+	rm -rf node-v7.1.0-linux-x86.tar.gz
 	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x86/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x86/bin/npm /usr/local/bin/npm
 fi
@@ -237,6 +201,7 @@ fi
 if [ ${OS_BIT} == 64 ];then
 	wget https://nodejs.org/dist/v7.1.0/node-v7.1.0-linux-x64.tar.gz
 	tar -xf node-v7.1.0-linux-x64.tar.gz -C /usr/local/nodejs7/
+	rm -rf node-v7.1.0-linux-x64.tar.gz
 	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x64/bin/node /usr/local/bin/node
 	ln -s /usr/local/nodejs7/node-v7.1.0-linux-x64/bin/npm /usr/local/bin/npm
 fi
