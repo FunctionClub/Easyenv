@@ -221,6 +221,30 @@ fi
 rm -rf /usr/local/java*
 }
 
+
+
+
+function InstallGoLang(){
+if [ ${OS_BIT} == 32 ];then
+	wget https://storage.googleapis.com/golang/go1.7.3.linux-386.tar.gz
+	tar -C /usr/local -xzf go1.7.3.linux-386.tar.gz
+	rm -rf go1.7.3.linux-386.tar.gz
+fi
+
+if [ ${OS_BIT} == 64 ];then
+	wget https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz
+	tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
+	rm -rf go1.7.3.linux-amd64.tar.gz
+fi
+	echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
+	echo "export GOROOT=$HOME/go" >> ~/.profile
+	echo "export PATH=$PATH:$GOROOT/bin" >> ~/.profile
+	#Apply the Env Settings Now
+	export GOROOT=$HOME/go
+	export PATH=$PATH:$GOROOT/bin
+	export PATH=$PATH:/usr/local/go/bin
+}
+
 #Main
 echo "Welcome to Easyenv!"
 echo "1.Install Java"
@@ -288,5 +312,9 @@ if [ $chooseenv == 2 ];then
 		UninstallNodeJs
 		InstallNodeJs7
 	fi
+fi
+
+if [ $chooseenv == 3 ];then
+	InstallGoLang
 fi
 
