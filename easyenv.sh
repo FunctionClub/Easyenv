@@ -262,7 +262,7 @@ make linux && make install
 
 function InstallRuby(){
 
-	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2 && rm -rf ruby-2.3.2.tar.gz
+	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2.tar.gz && rm -rf ruby-2.3.2.tar.gz
 	cd ruby-2.3.2
 	./configure && make && make install
 }
