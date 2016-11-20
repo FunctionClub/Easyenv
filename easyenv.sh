@@ -260,6 +260,13 @@ make linux && make install
 }
 
 
+function InstallRuby(){
+
+	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2 && rm -rf ruby-2.3.2.tar.gz
+	cd ruby-2.3.2
+	./configure && make && make install
+}
+
 #Main
 echo "Welcome to Easyenv!"
 echo "1.Install Java"
@@ -335,4 +342,8 @@ fi
 
 if [ $chooseenv == 4 ];then
 	InstallLua
+fi
+
+if [ $chooseenv == 5 ];then
+	InstallRuby
 fi
