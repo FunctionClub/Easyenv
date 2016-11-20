@@ -38,7 +38,15 @@ fi
 ######Check OS End######
 clear
 
+function PrintCopyright(){
+Copyright='
+Welcome to Easyenv!
+Setup your Linux Programming Environment by just One Click!
 
+More help and information are available in our QQ Group: 277717865
+';
+echo "$Copyright";
+}
 
 function InstallJava7(){
 rm -rf jdk*
@@ -259,14 +267,15 @@ cd ..
 
 function InstallRuby(){
 
-	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2.tar.gz && rm -rf ruby-2.3.2.tar.gz
+	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2.tar.gz
 	cd ruby-2.3.2
 	./configure && make && make install
 	cd ..
 }
 
 #Main
-echo "Welcome to Easyenv!"
+PrintCopyright
+
 echo "1.Install Java"
 echo "2.Install Nodejs"
 echo "3.Install GoLang"
@@ -347,7 +356,7 @@ fi
 if [ $chooseenv == 5 ];then
 	InstallRuby
 fi
-
 cd ../
-
 rm -rf src
+clear
+echo "All done! Please restart your server to apply all changes! "
