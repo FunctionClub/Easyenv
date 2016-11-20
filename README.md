@@ -2,7 +2,7 @@
 本脚本帮助所有的Linux用户轻松地部署编程语言环境，让天下没有难配置的语言环境。
 
 ## 安装命令
-	wget https://raw.g	ithubusercontent.com/FunctionClub/Easyenv/master/easyenv.sh && bash easyenv.sh 2>&1 | tee easyenv.log
+	wget https://raw.githubusercontent.com/FunctionClub/Easyenv/master/easyenv.sh && bash easyenv.sh 2>&1 | tee easyenv.log
 ## 系统要求
 
 - Centos 6
