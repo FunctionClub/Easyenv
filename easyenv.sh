@@ -210,11 +210,11 @@ fi
 function UninstallOpenJDK(){
 
 if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
-	apt-get purge jdk*
+	apt-get purge -y jdk*
 fi
 
 if [ ${OS} == CentOS ];then
-	yum remove jdk*
+	yum remove -y jdk*
 fi
 
 #Clean Installed Java via this script before
@@ -237,13 +237,28 @@ if [ ${OS_BIT} == 64 ];then
 	rm -rf go1.7.3.linux-amd64.tar.gz
 fi
 	echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
-	echo "export GOROOT=$HOME/go" >> ~/.profile
-	echo "export PATH=$PATH:$GOROOT/bin" >> ~/.profile
+	echo "export GOPATH=$HOME/workspace" >> ~/.profile
 	#Apply the Env Settings Now
-	export GOROOT=$HOME/go
-	export PATH=$PATH:$GOROOT/bin
-	export PATH=$PATH:/usr/local/go/bin
+	source ~/.profile
 }
+
+function InstallLua(){
+
+#Install readline
+if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
+	apt-get install -y libreadline-dev
+fi
+
+if [ ${OS} == CentOS ];then
+	yum install -y readline readline-devel
+fi
+
+wget http://www.lua.org/ftp/lua-5.3.3.tar.gz
+tar -xf lua-5.3.3.tar.gz
+cd lua-5.3.3
+make linux && make install
+}
+
 
 #Main
 echo "Welcome to Easyenv!"
@@ -318,3 +333,6 @@ if [ $chooseenv == 3 ];then
 	InstallGoLang
 fi
 
+if [ $chooseenv == 4 ];then
+	InstallLua
+fi
