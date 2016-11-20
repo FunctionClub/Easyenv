@@ -69,7 +69,6 @@ source ~/.bashrc
 
 function InstallJava8(){
 if [ ${OS_BIT} == 32 ];then
-	rm -rf jdk*
 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-i586.tar.gz"
 	tar -xf jdk-8u112-linux-i586.tar.gz && rm -rf jdk-8u112-linux-i586.tar.gz
 fi
@@ -84,7 +83,6 @@ cd jdk*
 mkdir /usr/local/java8
 mv * /usr/local/java8/
 cd ..
-rm -rf jdk*
 
 #Configure the PATH for Java8
 
@@ -228,18 +226,16 @@ function InstallGoLang(){
 if [ ${OS_BIT} == 32 ];then
 	wget https://storage.googleapis.com/golang/go1.7.3.linux-386.tar.gz
 	tar -C /usr/local -xzf go1.7.3.linux-386.tar.gz
-	rm -rf go1.7.3.linux-386.tar.gz
 fi
 
 if [ ${OS_BIT} == 64 ];then
 	wget https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz
 	tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
-	rm -rf go1.7.3.linux-amd64.tar.gz
 fi
-	echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
-	echo "export GOPATH=$HOME/workspace" >> ~/.profile
+	echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
+	echo "export GOPATH=$HOME/workspace" >> ~/.bashrc
 	#Apply the Env Settings Now
-	source ~/.profile
+	source ~/.bashrc
 }
 
 function InstallLua(){
@@ -257,6 +253,7 @@ wget http://www.lua.org/ftp/lua-5.3.3.tar.gz
 tar -xf lua-5.3.3.tar.gz
 cd lua-5.3.3
 make linux && make install
+cd ..
 }
 
 
@@ -265,6 +262,7 @@ function InstallRuby(){
 	wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.2.tar.gz && tar -xf ruby-2.3.2.tar.gz && rm -rf ruby-2.3.2.tar.gz
 	cd ruby-2.3.2
 	./configure && make && make install
+	cd ..
 }
 
 #Main
@@ -283,6 +281,8 @@ while :; do echo
 	fi
 done
 
+mkdir src
+cd src
 if [ $chooseenv == 1 ];then
 	echo "1.Java7"
 	echo "2.Java8"
@@ -347,3 +347,7 @@ fi
 if [ $chooseenv == 5 ];then
 	InstallRuby
 fi
+
+cd ../
+
+rm -rf src
